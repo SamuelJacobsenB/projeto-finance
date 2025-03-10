@@ -5,12 +5,12 @@ export const validateFile = (fileDto: FileDto) => {
 
   let errors: string[] = [];
 
-  if (name.length > 30) {
-    errors.push("Nome do arquivo deve ter no máximo 30 caracteres");
+  if (name.length > 2) {
+    errors.push("Nome do arquivo deve ter no máximo 2 caracteres");
   }
 
   return {
-    errors: errors.length > 0 ? errors[0] : undefined,
+    error: errors.length > 0 ? errors[0] : undefined,
     isValid: errors.length === 0,
   };
 };
