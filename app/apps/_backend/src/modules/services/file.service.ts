@@ -3,16 +3,16 @@ import { global } from "@/global";
 import { FolderService } from "./";
 import { defaultFileData } from "@/constants";
 import { validateFile } from "@core/validators";
-import { FileDto, File } from "@core/types";
+import { FileDto, File, Response } from "@core/types";
 
 const folderService = new FolderService();
 
 export class FileService {
-  async createFile(fileDto: FileDto): Promise<string> {
+  async createFile(fileDto: FileDto): Promise<Response<string>> {
     const { error, isValid } = validateFile(fileDto);
 
     if (!isValid) {
-      throw new Error(error);
+      return { error };
     }
 
     const folderPath = await folderService.createFolder({
@@ -24,12 +24,12 @@ export class FileService {
 
     fs.writeFileSync(filePath, JSON.stringify(defaultFileData, null, 2));
 
-    return filePath;
+    return { data: filePath };
   }
 
-  async readFile(path: string): Promise<File> {
+  async readFile(path: string): Promise<Response<File>> {
     if (!global.defaultPath) {
-      throw new Error("Você deve ter uma pasta selecionada");
+      return { error: "Você deve ter uma pasta selecionada" };
     }
 
     const newPath = [
@@ -45,6 +45,6 @@ export class FileService {
 
     const fileContent = fs.readFileSync(newPath, "utf-8");
 
-    return JSON.parse(fileContent);
+    return { data: JSON.parse(fileContent) };
   }
 }

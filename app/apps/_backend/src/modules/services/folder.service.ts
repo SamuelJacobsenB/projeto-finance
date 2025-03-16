@@ -1,32 +1,34 @@
 import fs from "fs";
 import { global } from "@/global";
 import { validateFolder } from "@core/validators";
-import { FolderDto } from "@core/types";
+import { FolderDto, Response } from "@core/types";
 
 export class FolderService {
-  selectFolder(path: string): void {
+  selectFolder(path: string): Response {
     if (!path) {
-      throw new Error("Você deve ter uma pasta selecionada");
+      return { error: "Você deve ter uma pasta selecionada" };
     }
 
     const ifExists = fs.existsSync(path);
 
     if (!ifExists) {
-      throw new Error("Pasta não encontrada");
+      return { error: "Pasta não encontrada" };
     }
 
     global.defaultPath = path;
+
+    return { data: path };
   }
 
-  async createFolder(folderDto: FolderDto): Promise<string> {
+  async createFolder(folderDto: FolderDto): Promise<Response<string>> {
     const { error, isValid } = validateFolder(folderDto);
 
     if (!isValid) {
-      throw new Error(error);
+      return { error };
     }
 
     if (!global.defaultPath) {
-      throw new Error("Você deve ter uma pasta selecionada");
+      return { error: "Você deve ter uma pasta selecionada" };
     }
 
     const folderPath = [
@@ -41,12 +43,12 @@ export class FolderService {
       fs.mkdirSync(folderPath, { recursive: true });
     }
 
-    return folderPath;
+    return { data: folderPath };
   }
 
-  async readFolder(path: string): Promise<string[]> {
+  async readFolder(path: string): Promise<Response<string[]>> {
     if (!global.defaultPath) {
-      throw new Error("Você deve ter uma pasta selecionada");
+      return { error: "Você deve ter uma pasta selecionada" };
     }
 
     const newPath = [global.defaultPath, path.replace("-", "/")].join("/");
@@ -61,6 +63,6 @@ export class FolderService {
 
     const fileNames = folderContent.map((file) => file.split(".")[0]);
 
-    return fileNames;
+    return { data: fileNames };
   }
 }

@@ -3,20 +3,26 @@ import { generateId } from "@/functions";
 import { global } from "@/global";
 import { FileService } from "./";
 import { validateTransaction } from "@core/validators";
-import { TransactionDto, File } from "@core/types";
+import { TransactionDto, File, Response } from "@core/types";
 
 const fileService = new FileService();
 
 export class TransactionService {
-  async transaction(transactionDto: TransactionDto) {
+  async transaction(transactionDto: TransactionDto): Promise<Response<string>> {
     const { error, isValid } = validateTransaction(transactionDto);
 
     if (!isValid) {
-      throw new Error(error);
+      return { error };
     }
 
     if (!global.defaultPath) {
-      throw new Error("Você deve ter uma pasta selecionada");
+      return { error: "Você deve ter uma pasta selecionada" };
+    }
+
+    const fileContent = await fileService.readFile(transactionDto.path);
+
+    if (fileContent.error || !fileContent.data) {
+      return { error: fileContent.error };
     }
 
     const newPath = [
@@ -24,19 +30,17 @@ export class TransactionService {
       transactionDto.path.replace(/-/g, "/") + ".json",
     ].join("/");
 
-    const fileContent = await fileService.readFile(transactionDto.path);
-
     const day = Number(transactionDto.path.split("-")[2]);
     const id = generateId(day);
 
     if (transactionDto.type === "input") {
-      fileContent.inputs.push({
+      fileContent.data.inputs.push({
         id,
         name: transactionDto.name,
         value: transactionDto.value,
       });
     } else {
-      fileContent.outputs.push({
+      fileContent.data.outputs.push({
         id,
         name: transactionDto.name,
         value: transactionDto.value,
@@ -45,12 +49,18 @@ export class TransactionService {
 
     fs.writeFileSync(newPath, JSON.stringify(fileContent, null, 2));
 
-    return newPath;
+    return { data: newPath };
   }
 
-  async deleteTransaction(path: string, id: number) {
+  async deleteTransaction(path: string, id: number): Promise<Response<string>> {
     if (!global.defaultPath) {
-      throw new Error("Você deve ter uma pasta selecionada");
+      return { error: "Você deve ter uma pasta selecionada" };
+    }
+
+    const fileContent = await fileService.readFile(path);
+
+    if (fileContent.error || !fileContent.data) {
+      return { error: fileContent.error };
     }
 
     const newPath = [
@@ -58,16 +68,16 @@ export class TransactionService {
       path.replace(/-/g, "/") + ".json",
     ].join("/");
 
-    const fileContent: File = await fileService.readFile(path);
+    fileContent.data.inputs = fileContent.data.inputs.filter(
+      (input) => input.id !== id
+    );
 
-    fileContent.inputs = fileContent.inputs.filter((input) => input.id !== id);
-
-    fileContent.outputs = fileContent.outputs.filter(
+    fileContent.data.outputs = fileContent.data.outputs.filter(
       (output) => output.id !== id
     );
 
     fs.writeFileSync(newPath, JSON.stringify(fileContent, null, 2));
 
-    return newPath;
+    return { data: newPath };
   }
 }
