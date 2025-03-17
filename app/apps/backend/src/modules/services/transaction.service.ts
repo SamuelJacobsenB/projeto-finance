@@ -1,13 +1,13 @@
 import fs from "fs";
-import { generateId } from "@/functions";
-import { global } from "@/global";
+import { generateId } from "../../functions";
+import { global } from "../../global";
 import { FileService } from "./";
-import { validateTransaction } from "@core/validators";
-import { TransactionDto, File, Response } from "@core/types";
-
-const fileService = new FileService();
+import { validateTransaction } from "../../../../../core/dist/validators";
+import { TransactionDto, Response } from "../../../../../core/dist/types";
 
 export class TransactionService {
+  private readonly fileService = new FileService();
+
   async transaction(transactionDto: TransactionDto): Promise<Response<string>> {
     const { error, isValid } = validateTransaction(transactionDto);
 
@@ -19,7 +19,7 @@ export class TransactionService {
       return { error: "Você deve ter uma pasta selecionada" };
     }
 
-    const fileContent = await fileService.readFile(transactionDto.path);
+    const fileContent = await this.fileService.readFile(transactionDto.path);
 
     if (fileContent.error || !fileContent.data) {
       return { error: fileContent.error };
@@ -47,7 +47,7 @@ export class TransactionService {
       });
     }
 
-    fs.writeFileSync(newPath, JSON.stringify(fileContent, null, 2));
+    fs.writeFileSync(newPath, JSON.stringify(fileContent.data, null, 2));
 
     return { data: newPath };
   }
@@ -57,7 +57,7 @@ export class TransactionService {
       return { error: "Você deve ter uma pasta selecionada" };
     }
 
-    const fileContent = await fileService.readFile(path);
+    const fileContent = await this.fileService.readFile(path);
 
     if (fileContent.error || !fileContent.data) {
       return { error: fileContent.error };
@@ -68,6 +68,8 @@ export class TransactionService {
       path.replace(/-/g, "/") + ".json",
     ].join("/");
 
+    console.log(fileContent.data.outputs);
+
     fileContent.data.inputs = fileContent.data.inputs.filter(
       (input) => input.id !== id
     );
@@ -76,7 +78,7 @@ export class TransactionService {
       (output) => output.id !== id
     );
 
-    fs.writeFileSync(newPath, JSON.stringify(fileContent, null, 2));
+    fs.writeFileSync(newPath, JSON.stringify(fileContent.data, null, 2));
 
     return { data: newPath };
   }

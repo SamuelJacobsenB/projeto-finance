@@ -1,13 +1,13 @@
 import fs from "fs";
-import { global } from "@/global";
+import { global } from "../../global";
 import { FolderService } from "./";
-import { defaultFileData } from "@/constants";
-import { validateFile } from "@core/validators";
+import { defaultFileData } from "../../constants";
+import { validateFile } from "../../../../../core/dist/validators";
 import { FileDto, File, Response } from "@core/types";
 
-const folderService = new FolderService();
-
 export class FileService {
+  private readonly folderService = new FolderService();
+
   async createFile(fileDto: FileDto): Promise<Response<string>> {
     const { error, isValid } = validateFile(fileDto);
 
@@ -15,12 +15,12 @@ export class FileService {
       return { error };
     }
 
-    const folderPath = await folderService.createFolder({
+    const folderPath = await this.folderService.createFolder({
       year: fileDto.year,
       month: fileDto.month,
     });
 
-    const filePath = [folderPath, fileDto.name + ".json"].join("/");
+    const filePath = [folderPath.data, fileDto.name + ".json"].join("/");
 
     fs.writeFileSync(filePath, JSON.stringify(defaultFileData, null, 2));
 
@@ -40,7 +40,7 @@ export class FileService {
     const ifExists = fs.existsSync(newPath);
 
     if (!ifExists) {
-      throw new Error("Arquivo não encontrado");
+      return { error: "Arquivo não encontrado" };
     }
 
     const fileContent = fs.readFileSync(newPath, "utf-8");

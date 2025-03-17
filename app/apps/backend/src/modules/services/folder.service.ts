@@ -1,7 +1,7 @@
 import fs from "fs";
-import { global } from "@/global";
-import { validateFolder } from "@core/validators";
-import { FolderDto, Response } from "@core/types";
+import { global } from "../../global";
+import { validateFolder } from "../../../../../core/dist/validators";
+import { FolderDto, Response } from "../../../../../core/dist/types";
 
 export class FolderService {
   selectFolder(path: string): Response {
@@ -51,12 +51,12 @@ export class FolderService {
       return { error: "Você deve ter uma pasta selecionada" };
     }
 
-    const newPath = [global.defaultPath, path.replace("-", "/")].join("/");
+    const newPath = [global.defaultPath, path.replace(/-/g, "/")].join("/");
 
     const ifExists = fs.existsSync(newPath);
 
     if (!ifExists) {
-      throw new Error("Pasta não encontrada");
+      return { error: "Pasta não encontrada" };
     }
 
     const folderContent = fs.readdirSync(newPath, "utf-8");

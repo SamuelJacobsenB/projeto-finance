@@ -1,19 +1,25 @@
 {
   "scripts": {
     "dev": "nodemon --exec ts-node src/server.ts",
-    "start": "tsc && node dist/server.ts",
+    "start": "tsc && node dist/server.js",
     "build": "tsc"
+  },
+  "_moduleAliases": {
+    "@": "dist",
+    "@core": "../../core/dist"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "fs": "^0.0.1-security",
+    "module-alias": "^2.2.3",
     "typescript": "^5.8.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "tsconfig-paths": "^4.2.0"
   }
 }

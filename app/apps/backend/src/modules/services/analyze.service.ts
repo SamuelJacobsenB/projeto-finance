@@ -1,5 +1,5 @@
 import { FileService, FolderService } from "./";
-import { Response, File } from "@core/types";
+import { Response, File } from "../../../../../core/dist/types";
 
 const fileService = new FileService();
 const folderService = new FolderService();

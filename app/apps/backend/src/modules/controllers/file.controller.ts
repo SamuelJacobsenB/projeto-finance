@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 const router = express.Router();
 
 import { FileService } from "../services";
-import { FileDto } from "@core/types";
+import { FileDto } from "../../../../../core/dist/types";
 
 const fileService = new FileService();
 
