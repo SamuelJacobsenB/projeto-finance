@@ -1,6 +1,8 @@
 import React from "react";
 import "./globals.css";
 
+import { Provider } from "@/contexts";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -8,7 +10,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <body>{children}</body>
+      <Provider>
+        <body>
+          <main id="root">{children}</main>
+        </body>
+      </Provider>
     </html>
   );
 }

@@ -1,7 +1,21 @@
 @import "tailwindcss";
 
-/* Azul Escuro	#003366
-Azul Claro	#66CCFF
-Branco	#FFFFFF
-Cinza Claro	#E0E0E0
-Azul Médio	#3399FF */
+@theme {
+  --color-primary: #003366;
+  --color-light-primary: #3399ff;
+  --color-secondary: #66ccff;
+  --color-gray: #e0e0e0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body,
+main#root {
+  font-family: "Poppins", sans-serif;
+  min-width: 100vw;
+  min-height: 100vh;
+}

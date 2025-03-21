@@ -1,10 +1,11 @@
 import fs from "fs";
 import { global } from "../../global";
+import { configFile } from "../../constants";
 import { validateFolder } from "../../../../../core/dist/validators";
 import { FolderDto, Response } from "../../../../../core/dist/types";
 
 export class FolderService {
-  selectFolder(path: string): Response {
+  async selectFolder(path: string): Promise<Response<string>> {
     if (!path) {
       return { error: "Você deve ter uma pasta selecionada" };
     }
@@ -13,6 +14,14 @@ export class FolderService {
 
     if (!ifExists) {
       return { error: "Pasta não encontrada" };
+    }
+
+    const configFilePath = [path, "config.json"].join("/");
+
+    const ifConfigFileExists = fs.existsSync(configFilePath);
+
+    if (!ifConfigFileExists) {
+      fs.writeFileSync(configFilePath, JSON.stringify(configFile), "utf-8");
     }
 
     global.defaultPath = path;
