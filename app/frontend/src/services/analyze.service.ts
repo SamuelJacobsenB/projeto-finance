@@ -1,16 +1,16 @@
 import { FileService, FolderService } from "./";
 import { Response, File } from "@/types";
 
-const fileService = new FileService();
-const folderService = new FolderService();
-
 export class AnalyzeService {
+  private readonly fileService = new FileService();
+  private readonly folderService = new FolderService();
+
   async analyzeFile(
     path: string
   ): Promise<
     Response<{ fileContent: File; totalInputs: number; totalOutputs: number }>
   > {
-    const fileContent = await fileService.readFile(path);
+    const fileContent = await this.fileService.readFile(path);
 
     if (fileContent.error || !fileContent.data) {
       return { error: fileContent.error };
@@ -36,7 +36,7 @@ export class AnalyzeService {
   }
 
   async analyzeMonth(path: string) {
-    const fileNames = await folderService.readFolder(path);
+    const fileNames = await this.folderService.readFolder(path);
 
     if (fileNames.error || !fileNames.data) {
       return { error: fileNames.error };
@@ -66,7 +66,7 @@ export class AnalyzeService {
   ): Promise<
     Response<{ balance: number; totalInputs: number; totalOutputs: number }>
   > {
-    const folderNames = await folderService.readFolder(path);
+    const folderNames = await this.folderService.readFolder(path);
 
     if (folderNames.error || !folderNames.data) {
       return { error: folderNames.error };
