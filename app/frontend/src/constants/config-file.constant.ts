@@ -1,4 +1,4 @@
-import { ConfigFile } from "@core/types";
+import { ConfigFile } from "@/types";
 
 export const configFile: ConfigFile = {
   input_names: [

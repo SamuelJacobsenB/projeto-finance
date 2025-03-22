@@ -1,9 +1,9 @@
 import fs from "fs";
-import { global } from "../../global";
+import { global } from "@/global";
 import { FolderService } from "./";
-import { defaultFileData } from "../../constants";
-import { validateFile } from "../../../../../core/dist/validators";
-import { FileDto, File, Response } from "@core/types";
+import { defaultFileData } from "@/constants";
+import { validateFile } from "@/validators";
+import { FileDto, File, Response } from "@/types";
 
 export class FileService {
   private readonly folderService = new FolderService();

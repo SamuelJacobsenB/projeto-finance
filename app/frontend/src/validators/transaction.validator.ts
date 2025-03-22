@@ -3,7 +3,7 @@ import { TransactionDto } from "../types";
 export const validateTransaction = (transactionDro: TransactionDto) => {
   const { type, value, name } = transactionDro;
 
-  let errors: string[] = [];
+  const errors: string[] = [];
 
   if (!name) {
     errors.push("Nome da transação é obrigatório");

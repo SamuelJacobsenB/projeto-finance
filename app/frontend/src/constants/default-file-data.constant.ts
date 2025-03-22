@@ -1,4 +1,4 @@
-import { File } from "@core/types";
+import { File } from "@/types";
 
 export const defaultFileData: File = {
   inputs: [],

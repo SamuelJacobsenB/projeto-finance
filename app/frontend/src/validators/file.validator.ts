@@ -3,7 +3,7 @@ import { FileDto } from "../types";
 export const validateFile = (fileDto: FileDto) => {
   const { name } = fileDto;
 
-  let errors: string[] = [];
+  const errors: string[] = [];
 
   if (name.length > 2) {
     errors.push("Nome do arquivo deve ter no máximo 2 caracteres");

@@ -1,6 +1,6 @@
 import fs from "fs";
-import { configFile } from "../../constants";
-import { ConfigFile } from "@core/types";
+import { configFile } from "@/constants";
+import { ConfigFile } from "@/types";
 
 export class ConfigService {
   async createConfigFile(path: string): Promise<void> {

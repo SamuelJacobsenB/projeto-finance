@@ -1,9 +1,9 @@
 import fs from "fs";
-import { generateId } from "../../functions";
-import { global } from "../../global";
+import { generateId } from "@/functions";
+import { global } from "@/global";
 import { FileService } from "./";
-import { validateTransaction } from "../../../../../core/dist/validators";
-import { TransactionDto, Response } from "../../../../../core/dist/types";
+import { validateTransaction } from "@/validators";
+import { TransactionDto, Response } from "@/types";
 
 export class TransactionService {
   private readonly fileService = new FileService();

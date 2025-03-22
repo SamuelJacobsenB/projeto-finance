@@ -1,10 +1,12 @@
 import fs from "fs";
-import { global } from "../../global";
-import { configFile } from "../../constants";
-import { validateFolder } from "../../../../../core/dist/validators";
-import { FolderDto, Response } from "../../../../../core/dist/types";
+import { global } from "@/global";
+import { ConfigService } from "./";
+import { validateFolder } from "@/validators";
+import { FolderDto, Response } from "@/types";
 
 export class FolderService {
+  private readonly configService = new ConfigService();
+
   async selectFolder(path: string): Promise<Response<string>> {
     if (!path) {
       return { error: "Você deve ter uma pasta selecionada" };
@@ -21,7 +23,7 @@ export class FolderService {
     const ifConfigFileExists = fs.existsSync(configFilePath);
 
     if (!ifConfigFileExists) {
-      fs.writeFileSync(configFilePath, JSON.stringify(configFile), "utf-8");
+      await this.configService.createConfigFile(configFilePath);
     }
 
     global.defaultPath = path;
