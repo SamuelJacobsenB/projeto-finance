@@ -3,15 +3,15 @@
 import { Header } from "./header";
 import { Nav } from "./nav";
 
-interface Layout {
+interface LayoutProps {
   children: React.ReactNode;
 }
 
-export const Layout = ({ children }: Layout) => {
+export const Layout = ({ children }: LayoutProps) => {
   return (
     <>
       <Header />
-      <div className="flex flex-1 min-h-full">
+      <div className="flex gap-2 content-container">
         <Nav />
         {children}
       </div>

@@ -7,8 +7,8 @@ import { PowerOff } from "./power-off";
 
 export const Header = () => {
   return (
-    <header className="sticky top-0 flex justify-between items-center bg-primary w-screen min-h-20 pr-4">
-      <Link href={"/dashboard"}>
+    <header className="sticky top-0 flex justify-between items-center bg-primary w-full min-h-20 pr-4">
+      <Link href={"/dashboard"} className="flex items-center">
         <Image
           src={"/imgs/white-slogan.png"}
           alt="Logo"

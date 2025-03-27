@@ -21,3 +21,13 @@ main#root {
   min-width: 100vw;
   min-height: 100vh;
 }
+
+hr {
+  height: 1px;
+  background-color: rgba(20, 20, 20, 0.865);
+}
+
+.content-container {
+  width: 100%;
+  min-height: calc(100vh - 80px);
+}

@@ -15,7 +15,7 @@ export const NavLink = ({
   return (
     <Link
       href={href}
-      className={`text-lg w-full p-2 hover:text-black ${
+      className={`text-lg w-full p-2 hover:text-black hover:underline ${
         isSelected ? "text-black" : "text-gray-600"
       }`}
     >
